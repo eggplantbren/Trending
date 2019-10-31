@@ -2,11 +2,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import numpy.random as rng
 
+
 num_claims = 10
-num_epochs = 50
-scale_length = 2.0
+num_epochs = 50     # Let's assume epochs are 6 hours
+scale_length = 4.0  # Exponential scale length is a day
 
-
+# Some simulation parameters
 alpha = 0.99
 beta = np.sqrt(1.0 - alpha**2)
 
@@ -73,10 +74,12 @@ for i in range(num_claims):
     elif ranks[i] < 2:
         alpha, linewidth, label = 0.5, 2.0, "Second most trending"
 
-    plt.plot(ys[i, :], "o-", alpha=alpha, linewidth=linewidth,\
+    plt.plot(np.arange(0, num_epochs)/4, ys[i, :],
+                "-", alpha=alpha, linewidth=linewidth,
                 label=label)
-plt.xlabel("time")
+
+plt.xlabel("Time (days)")
 plt.ylabel("log10(total_amount + 10 LBC)")
-plt.legend()
+plt.legend(loc="upper left")
 plt.show()
 
