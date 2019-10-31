@@ -2,10 +2,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import numpy.random as rng
 
-
-num_claims = 10
+num_claims = 10     # How many claims to simulate
 num_epochs = 50     # Let's assume epochs are 6 hours
-scale_length = 4.0  # Exponential scale length is a day
+scale_length = 4.0  # Exponential scale length of trending is a day
 
 # Some simulation parameters
 alpha = 0.99
@@ -67,6 +66,9 @@ ranks = np.empty(num_claims, dtype="int64")
 for i in range(num_claims):
     ranks[i] = np.sum(scalar > scalar[i])
 
+
+
+# Plot trajectories, highlighting the trending ones
 for i in range(num_claims):
     alpha, linewidth, label = 0.2, 1.0, None
     if ranks[i] == 0:
