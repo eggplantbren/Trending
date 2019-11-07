@@ -3,17 +3,17 @@ import numpy as np
 import numpy.random as rng
 
 # Simulation parameters
-num_claims = 10     # How many claims to simulate
-num_epochs = 336    # Let's assume epochs are one hour
+num_claims = 100     # How many claims to simulate
+num_epochs = 168    # Let's assume epochs are one hour
 
 # Floor parameter
 c = 10.0
 
 # Decay parameter
-K = 0.95
+K = 0.97
 
 # Power parameter
-a = 0.1
+a = 0.05
 
 
 def soften(x):
@@ -46,20 +46,17 @@ def simulate_claims():
     along with final trending_score for each claim.
     """
 
-    # Some simulation parameters
-    alpha = 0.999
-    beta = np.sqrt(1.0 - alpha**2)
-
     # Total value of each claim at each epoch
     xs = np.zeros((num_claims, num_epochs))
 
     # Generate trajectories
     for i in range(num_claims):
-        xs[i, 0] = 1.0 + 2.0*rng.randn()
+        xs[i, 0] = 2.0 + 3.0*rng.randn()
+        prob = 0.2*rng.rand()
         for j in range(1, num_epochs):
             xs[i, j] = xs[i, j-1]
-            if rng.rand() <= 0.05:
-                xs[i, j] += 0.5 + rng.randn()
+            if rng.rand() <= prob:
+                xs[i, j] += 0.05 + 0.3*rng.randn()
         xs[i, :] = np.exp(xs[i, :])
 
 #    # Add trend
