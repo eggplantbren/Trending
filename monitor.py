@@ -71,8 +71,7 @@ while True:
             new_score = K*data[claim_id]["trending_score"] + soften(new_amount)\
                              - soften(old_amount)
         except:
-            old_amount = 0.0
-            new_score = soften(new_amount) - soften(old_amount)
+            new_score = 0.01
 
         data[row[0]] = {"name": row[1], "amount": new_amount,
                                 "trending_score": new_score}
