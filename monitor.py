@@ -49,6 +49,7 @@ data = {}
 
 
 # Loop
+epoch = 0
 while True:
 
     # Connection to claims.db
@@ -84,6 +85,9 @@ while True:
     indices = np.argsort(trendings)[::-1]
     claim_ids = np.array(claim_ids)[indices[0:100]]
     f = open("/keybase/public/brendonbrewer/trending.txt", "w")
+    s = "Epoch " + str(epoch)
+    print(s)
+    f.write(s + "\n")
     for claim_id in claim_ids:
         s = "https://lbry.tv/" + data[claim_id]["name"] + ":" + claim_id
         print(s)
@@ -93,5 +97,6 @@ while True:
 
     import time
     time.sleep(15*60)
+    epoch += 1
 
 
