@@ -31,7 +31,7 @@ def get_block():
 C = 10.0
 
 # Decay parameter
-K = 0.97
+K = 0.995
 
 # Power parameter
 a = 0.05
@@ -76,15 +76,18 @@ while True:
         data[row[0]] = {"name": row[1], "amount": new_amount,
                                 "trending_score": new_score}
         claim_ids.append(row[0])
-        trendings.append(new_score)
+        trendings.append(new_score*new_amount**a)
 
     conn.close()
 
-    # Extract top 10
+    # Extract top 100
     indices = np.argsort(trendings)[::-1]
-    claim_ids = np.array(claim_ids)[indices[0:10]]
+    claim_ids = np.array(claim_ids)[indices[0:100]]
+    f = open("/keybase/public/brendonbrewer/trending.txt", "w")
     for claim_id in claim_ids:
-        print("https://lbry.tv/" + data[claim_id]["name"] + ":" + claim_id)
+        s = "https://lbry.tv/" + data[claim_id]["name"] + ":" + claim_id
+        print(s)
+        f.write(s + "\n")
     print("")
 
     import time
