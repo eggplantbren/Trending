@@ -31,7 +31,7 @@ def get_block():
 C = 10.0
 
 # Decay parameter
-K = 0.995
+K = 0.99
 
 # Power parameter
 a = 0.05
@@ -89,8 +89,9 @@ while True:
         print(s)
         f.write(s + "\n")
     print("")
+    f.close()
 
     import time
-    time.sleep(300.0)
+    time.sleep(15*60)
 
 
