@@ -28,7 +28,7 @@ def get_block():
 
 
 # Floor parameter
-C = 10.0
+C = 100.0
 
 # Decay parameter
 K = 0.997
