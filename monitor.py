@@ -40,7 +40,7 @@ def soften(x):
     """
     Softening function
     """
-    return np.log10(x + C)
+    return np.sqrt(x + C)
 
 # Dict from claim_id to measurements
 data = {}
@@ -122,7 +122,9 @@ SELECT claim_id, claim_name, (amount + support_amount) total_amount FROM claim
   </p>
 
   <p>
-    Current epoch: {epoch}
+    Current epoch: {epoch}<br>
+    If this number is less than a few hundred, it means I recently restarted
+    the program, and the results might not be optimal.
   </p>
 
   <table>
