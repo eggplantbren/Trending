@@ -104,6 +104,7 @@ while True:
 <!DOCTYPE HTML>
 <html>
 <head>
+  <meta http-equiv="refresh" content="120">
   <title>Brendon's trending list</title>
 </head>
 <body>
@@ -112,10 +113,14 @@ while True:
   it could easily be NSFW.
   </p>
 
+  <p>
+    Current epoch: {epoch}
+  </p>
+
   <table>
     <tr>  <td>Rank</td>   <td>Vanity Name</td>  <td>Score</td> </tr>
  
-""")
+""".format(epoch=epoch))
 
     for i in range(len(claim_ids)):
         f.write("<tr>")
@@ -137,7 +142,7 @@ while True:
     f.close()
 
 
-    print("Done epoch {epoch}".format(epoch=epoch))
+    print("Done epoch {epoch}.".format(epoch=epoch))
     epoch += 1
     import time
     time.sleep(5*60)
