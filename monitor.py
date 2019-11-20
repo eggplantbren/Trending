@@ -110,7 +110,7 @@ while True:
 <body>
   <p>
   I take no responsibility for the linked content. Proceed with extreme caution,
-  it could easily be NSFW.
+  it could be NSFW or even (rarely, probably) illegal where you live!
   </p>
 
   <p>
