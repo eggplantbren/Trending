@@ -84,20 +84,63 @@ while True:
     indices = np.argsort(trendings)[::-1]
     claim_ids = np.array(claim_ids)[indices[0:100]]
     trendings = np.array(trendings)[indices[0:100]]
-    f = open("/keybase/public/brendonbrewer/trending.txt", "w")
-    s = "# Epoch " + str(epoch)
-    print(s)
-    f.write(s + "\n")
+
+    the_dict = { "epoch": epoch, "ranks": [],  "claim_ids": [],
+                    "vanity_names": [], "final_scores": [] }
     for i in range(len(claim_ids)):
-        s = "https://lbry.tv/" + data[claim_ids[i]]["name"] + ":" + claim_ids[i]
-        s += "," + str(trendings[i])
-        print(s)
-        f.write(s + "\n")
-    print("")
+        the_dict["ranks"].append(i+1)
+        the_dict["claim_ids"].append(claim_ids[i])
+        the_dict["vanity_names"].append(data[claim_ids[i]]["name"])
+        the_dict["final_scores"].append(trendings[i])
+
+    f = open("/home/brewer/Projects/LBRYnomics/trending.json", "w")
+    f.write(json.dumps(the_dict))
     f.close()
 
+
+    # Also save to HTML file
+    f = open("/keybase/public/brendonbrewer/trending.html", "w")
+    f.write("""
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Brendon's trending list</title>
+</head>
+<body>
+  <p>
+  I take no responsibility for the linked content. Proceed with extreme caution,
+  it could easily be NSFW.
+  </p>
+
+  <table>
+    <tr>  <td>Rank</td>   <td>Vanity Name</td>  <td>Score</td> </tr>
+ 
+""")
+
+    for i in range(len(claim_ids)):
+        f.write("<tr>")
+        f.write("<td>{rank}</td>".format(rank=the_dict["ranks"][i]))
+        url = "https://lbry.tv/{vanity}:{claim_id}"\
+                .format(vanity=the_dict["vanity_names"][i],
+                        claim_id=the_dict["claim_ids"][i])
+        link = "<a href=\"{url}\" target=\"_blank\">".format(url=url)\
+                     + the_dict["vanity_names"][i] + "</a>"
+        f.write("<td>" + str(link) + "</td>")
+        f.write("<td>{score}</td>".format(score=the_dict["final_scores"][i]))
+        f.write("</tr>\n")
+    f.write("""
+</table>
+</body>
+</html>
+""")
+
+    f.close()
+
+
+    print("Done epoch {epoch}".format(epoch=epoch))
+    epoch += 1
     import time
     time.sleep(5*60)
-    epoch += 1
+
 
 
