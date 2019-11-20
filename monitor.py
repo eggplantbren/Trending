@@ -40,7 +40,7 @@ def soften(x):
     """
     Softening function
     """
-    return np.sqrt(x + C)
+    return np.sqrt(x + C) - np.sqrt(C)
 
 # Dict from claim_id to measurements
 data = {}
