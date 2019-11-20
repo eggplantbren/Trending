@@ -63,7 +63,15 @@ while True:
     trendings = []
 
     # Make dict from claim_id to name, total_amount, and trending score
-    for row in c.execute("SELECT claim_id, claim_name, (amount + support_amount) total_amount FROM claim;"):
+    for row in c.execute("""
+SELECT claim_id, claim_name, (amount + support_amount) total_amount FROM claim
+    WHERE claim_hash NOT IN
+        (SELECT claim.claim_hash
+            FROM claim INNER JOIN tag ON tag.claim_hash = claim.claim_hash
+                                            AND tag.tag = "mature");
+"""):
+
+
         claim_id = row[0]
         new_total_amount = row[2]/1E8
         try:
