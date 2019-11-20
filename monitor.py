@@ -31,7 +31,7 @@ def get_block():
 C = 10.0
 
 # Decay parameter
-K = 0.99
+K = 0.997
 
 # Power parameter
 a = 0.05
@@ -62,40 +62,42 @@ while True:
     claim_ids = []
     trendings = []
 
-    # Make dict from claim_id to name, amount, and trending score
-    for row in c.execute("SELECT claim_id, claim_name, amount FROM claim;"):
+    # Make dict from claim_id to name, total_amount, and trending score
+    for row in c.execute("SELECT claim_id, claim_name, (amount + support_amount) total_amount FROM claim;"):
         claim_id = row[0]
-        new_amount = row[2]/1E8
+        new_total_amount = row[2]/1E8
         try:
-            old_amount = data[claim_id]["amount"]
-            new_score = K*data[claim_id]["trending_score"] + soften(new_amount)\
-                             - soften(old_amount)
+            old_total_amount = data[claim_id]["total_amount"]
+            new_score = K*data[claim_id]["trending_score"] + soften(new_total_amount)\
+                             - soften(old_total_amount)
         except:
             new_score = 0.01
 
-        data[row[0]] = {"name": row[1], "amount": new_amount,
+        data[row[0]] = {"name": row[1], "total_amount": new_total_amount,
                                 "trending_score": new_score}
         claim_ids.append(row[0])
-        trendings.append(new_score*new_amount**a)
+        trendings.append(new_score*new_total_amount**a)
 
     conn.close()
 
     # Extract top 100
     indices = np.argsort(trendings)[::-1]
     claim_ids = np.array(claim_ids)[indices[0:100]]
+    trendings = np.array(trendings)[indices[0:100]]
     f = open("/keybase/public/brendonbrewer/trending.txt", "w")
-    s = "Epoch " + str(epoch)
+    s = "# Epoch " + str(epoch)
     print(s)
     f.write(s + "\n")
-    for claim_id in claim_ids:
-        s = "https://lbry.tv/" + data[claim_id]["name"] + ":" + claim_id
+    for i in range(len(claim_ids)):
+        s = "https://lbry.tv/" + data[claim_ids[i]]["name"] + ":" + claim_ids[i]
+        s += "," + str(trendings[i])
         print(s)
         f.write(s + "\n")
     print("")
     f.close()
 
     import time
-    time.sleep(15*60)
+    time.sleep(5*60)
     epoch += 1
 
 
