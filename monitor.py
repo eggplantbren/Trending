@@ -118,17 +118,20 @@ SELECT claim_id, claim_name, (amount + support_amount) total_amount FROM claim
 <body>
   <p>
   I take no responsibility for the linked content. Proceed with extreme caution,
-  it could be NSFW or even (rarely, probably) illegal where you live!
+  it could be NSFW or even (rarely) illegal where you live!
+  </p>
+
+  <p>
+    If the epoch number is less than a few hundred, it means I recently restarted
+    the program, and the results might not be optimal.
   </p>
 
   <p>
     Current epoch: {epoch}<br>
-    If this number is less than a few hundred, it means I recently restarted
-    the program, and the results might not be optimal.
   </p>
 
   <table>
-    <tr>  <td>Rank</td>   <td>Vanity Name</td>  <td>Score</td> </tr>
+    <tr style="font-weight: bold">  <td>Rank</td>   <td>Vanity Name</td>  <td>Score</td> </tr>
  
 """.format(epoch=epoch))
 
