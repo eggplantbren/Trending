@@ -3,29 +3,6 @@ import numpy as np
 import subprocess
 import sqlite3
 
-# Full path to the lbrynet binary
-lbrynet_bin = "/opt/LBRY/resources/static/daemon/lbrynet"
-
-def daemon_command(command, message="Calling lbrynet daemon..."):
-    """
-    Run a daemon command and return its output.
-    """
-    print(message, end="", flush=True)
-    command = lbrynet_bin + " " + command
-    parts = command.split(" ")
-    output = subprocess.run(parts, capture_output=True)
-    print("done.")
-    return json.loads(output.stdout)
-
-
-def get_block():
-    """
-    Get current block
-    """
-    result = daemon_command("status", message="Getting current block...")
-    return result["wallet"]["blocks"]
-
-
 
 # Floor parameter
 C = 100.0
