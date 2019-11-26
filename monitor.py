@@ -129,7 +129,7 @@ SELECT claim_id, claim_name, (amount + support_amount) total_amount FROM claim
 
   <table>
     <col width="130">
-    <tr style="font-weight: bold">  <td>Rank</td>   <td>Vanity Name</td>  <td>Score</td> </tr>
+    <tr style="font-weight: bold">  <td>Rank</td>   <td>Claim Name</td>  <td>Score</td> </tr>
  
 """.format(epoch=epoch))
 
