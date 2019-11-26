@@ -109,17 +109,18 @@ SELECT claim_id, claim_name, (amount + support_amount) total_amount FROM claim
   <p>
     The "current epoch" number below counts the number of times the
     table has been updated to take into account recent events on the
-    LBRY blockchain. Tips, supports, changes in the publisher's deposit, and
-    removal of tips and supports all affect the trending score shown here.
+    LBRY blockchain. Tips, supports, changes in the publisher's deposit, as
+    well as the removal of tips and supports,
+    will all affect the trending score shown here.
     If the epoch number is less than a few hundred, it means I recently
     restarted
     the program which generates this page, so the results might not be optimal.
   </p>
 
   <p>
-    I am also working to try to incorporate an algorithm like this (though
-    updated less frequently) into LBRY itself, for experimental purposes at
-    first.
+    I am also working to try to incorporate a similar algorithm (albeit
+    updated less frequently, for technical reasons)
+    into LBRY itself, to see how it compares to the current trending algorithm.
   </p>
 
   <p>
