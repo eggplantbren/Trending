@@ -91,17 +91,20 @@ SELECT claim_id, claim_name, (amount + support_amount) total_amount FROM claim
 <head>
   <meta http-equiv="refresh" content="120">
   <title>Brendon's trending list</title>
+  <style>
+    body {{ background-color: #333333;
+           color: #DDDDDD; }}
+    a    {{ color: #8888EE; }}
+  </style>
 </head>
 <body>
   <p>
     Welcome to my experimental responsive trending list.
-  I take no responsibility for the linked content. Proceed with caution,
-  it could be NSFW or (rarely) illegal where you live.
-  </p>
-
-  <p>
-    If the epoch number is less than a few hundred, it means I recently restarted
-    the program, and the results might not be optimal.
+    I take no responsibility for the linked content. Proceed with caution,
+    it could be NSFW or (rarely) illegal where you live.
+    If the epoch number is less than a few hundred, it means I recently
+    restarted
+    the program which generates this page, so the results might not be optimal.
   </p>
 
   <p>
@@ -109,6 +112,7 @@ SELECT claim_id, claim_name, (amount + support_amount) total_amount FROM claim
   </p>
 
   <table>
+    <col width="130">
     <tr style="font-weight: bold">  <td>Rank</td>   <td>Vanity Name</td>  <td>Score</td> </tr>
  
 """.format(epoch=epoch))
