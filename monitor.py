@@ -31,7 +31,7 @@ def get_block():
 C = 100.0
 
 # Decay parameter
-K = 0.997
+K = 0.998
 
 # Power parameter
 a = 0.05
@@ -79,7 +79,7 @@ SELECT claim_id, claim_name, (amount + support_amount) total_amount FROM claim
             new_score = K*data[claim_id]["trending_score"] + soften(new_total_amount)\
                              - soften(old_total_amount)
         except:
-            new_score = 0.01
+            new_score = 1.0E-6
 
         data[row[0]] = {"name": row[1], "total_amount": new_total_amount,
                                 "trending_score": new_score}
@@ -88,10 +88,10 @@ SELECT claim_id, claim_name, (amount + support_amount) total_amount FROM claim
 
     conn.close()
 
-    # Extract top 100
+    # Extract top 1000
     indices = np.argsort(trendings)[::-1]
-    claim_ids = np.array(claim_ids)[indices[0:100]]
-    trendings = np.array(trendings)[indices[0:100]]
+    claim_ids = np.array(claim_ids)[indices[0:1000]]
+    trendings = np.array(trendings)[indices[0:1000]]
 
     the_dict = { "epoch": epoch, "ranks": [],  "claim_ids": [],
                     "vanity_names": [], "final_scores": [] }
@@ -117,8 +117,9 @@ SELECT claim_id, claim_name, (amount + support_amount) total_amount FROM claim
 </head>
 <body>
   <p>
-  I take no responsibility for the linked content. Proceed with extreme caution,
-  it could be NSFW or even (rarely) illegal where you live!
+    Welcome to my experimental responsive trending list.
+  I take no responsibility for the linked content. Proceed with caution,
+  it could be NSFW or (rarely) illegal where you live.
   </p>
 
   <p>
