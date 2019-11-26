@@ -103,9 +103,14 @@ SELECT claim_id, claim_name, (amount + support_amount) total_amount FROM claim
     I take no responsibility for the linked content. Proceed with caution,
     it could be NSFW or (rarely) illegal where you live.
     This table updates itself about every 5-6 minutes, and the page also
-    auto-refreshes so you don't have to.
+    auto-refreshes every two minutes so you don't have to do it manually.
+  </p>
+
+  <p>
     The "current epoch" number below counts the number of times the
-    table has been updated to take into account new tips and supports.
+    table has been updated to take into account recent events on the
+    LBRY blockchain. Tips, supports, changes in the publisher's deposit, and
+    removal of tips and supports all affect the trending score shown here.
     If the epoch number is less than a few hundred, it means I recently
     restarted
     the program which generates this page, so the results might not be optimal.
