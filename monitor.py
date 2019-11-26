@@ -99,12 +99,22 @@ SELECT claim_id, claim_name, (amount + support_amount) total_amount FROM claim
 </head>
 <body>
   <p>
-    Welcome to my experimental responsive trending list.
+    Welcome to my experimental responsive LBRY trending list.
     I take no responsibility for the linked content. Proceed with caution,
     it could be NSFW or (rarely) illegal where you live.
+    This table updates itself about every 5-6 minutes, and the page also
+    auto-refreshes so you don't have to.
+    The "current epoch" number below counts the number of times the
+    table has been updated to take into account new tips and supports.
     If the epoch number is less than a few hundred, it means I recently
     restarted
     the program which generates this page, so the results might not be optimal.
+  </p>
+
+  <p>
+    I am also working to try to incorporate an algorithm like this (though
+    updated less frequently) into LBRY itself, for experimental purposes at
+    first.
   </p>
 
   <p>
