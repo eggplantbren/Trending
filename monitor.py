@@ -45,7 +45,8 @@ SELECT claim_id, claim_name, (amount + support_amount) total_amount FROM claim
     WHERE claim_hash NOT IN
         (SELECT claim.claim_hash
             FROM claim INNER JOIN tag ON tag.claim_hash = claim.claim_hash
-                                            AND tag.tag = "mature");
+            WHERE tag.tag = "mature" OR tag.tag = "nsfw" OR
+                  tag.tag = "porn" OR tag.tag = "xxx");
 """):
 
 
