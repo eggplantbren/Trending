@@ -35,6 +35,37 @@ def daemon_command(command, message="Calling lbrynet daemon..."):
     return json.loads(output.stdout)
 
 
+def format_line(i, the_dict, result):
+    """
+    Write one line of the table into a string
+    """
+    s = ""
+
+    s += "<td>{rank}</td>".format(rank=the_dict["ranks"][i])
+    s += "<td>{score}</td>".format(score=the_dict["final_scores"][i])
+
+    full_name = the_dict["vanity_names"][i] + "#" + the_dict["claim_ids"][i]
+    claim = result[full_name]
+    canonical_url = claim["canonical_url"]
+    tv_url = "https://lbry.tv/" + canonical_url[7:]
+    tv_url = tv_url.replace("#", ":")
+
+    if claim["value_type"] == "channel":
+        title = claim["name"]
+    else:
+        title = claim["value"]["title"]
+    short_title = title[0:50]
+    if len(short_title) < len(title):
+        short_title += "..."
+
+
+    link = "<a href=\"{url}\" target=\"_blank\">".format(url=tv_url)\
+                 + short_title + "</a>"
+    s += "<td>" + link + "</td>"
+    s += "<td class=\"canonical\">{url}</td>".format(url=canonical_url)
+    return s
+
+
 if __name__ == "__main__":
 
     # Dict from claim_id to measurements
@@ -173,28 +204,13 @@ if __name__ == "__main__":
 
         for i in range(len(claim_ids)):
             f.write("<tr>")
-            f.write("<td>{rank}</td>".format(rank=the_dict["ranks"][i]))
-            f.write("<td>{score}</td>".format(score=the_dict["final_scores"][i]))
 
-            full_name = the_dict["vanity_names"][i] + "#" + the_dict["claim_ids"][i]
-            claim = result[full_name]
-            canonical_url = claim["canonical_url"]
-            tv_url = "https://lbry.tv/" + canonical_url[7:]
-            tv_url = tv_url.replace("#", ":")
+            try:
+                s = format_line(i, the_dict, result)
+                f.write(s)
+            except:
+                f.write("<td>N/A</td> <td>N/A</td> <td>N/A</td> <td class=\"canonical\">N/A</td>")
 
-            if claim["value_type"] == "channel":
-                title = claim["name"]
-            else:
-                title = claim["value"]["title"]
-            short_title = title[0:50]
-            if len(short_title) < len(title):
-                short_title += "..."
-
-
-            link = "<a href=\"{url}\" target=\"_blank\">".format(url=tv_url)\
-                         + short_title + "</a>"
-            f.write("<td>" + link + "</td>")
-            f.write("<td class=\"canonical\">{url}</td>".format(url=canonical_url))
             f.write("</tr>\n")
         f.write("""
     </table>
