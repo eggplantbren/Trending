@@ -168,9 +168,9 @@ if __name__ == "__main__":
 
       <p>
         Welcome to my experimental responsive LBRY trending list.
-        I take no responsibility for the linked content. Proceed with caution,
-        it could be NSFW or (rarely) illegal where you live.
-        This table updates itself about every 5-6 minutes, and the page also
+        I take no responsibility for the linked content. Proceed with caution
+        when following links as they could be NSFW or otherwise dubious.
+        This table updates itself every 5 minutes, and the page also
         auto-refreshes every two minutes so you don't have to do it manually.
       </p>
 
@@ -186,9 +186,10 @@ if __name__ == "__main__":
       </p>
 
       <p>
-        I am also working to try to incorporate a similar algorithm (albeit
-        updated less frequently, for technical reasons)
-        into LBRY itself, to see how it compares to the current trending algorithm.
+        I am also working to try to incorporate a similar algorithm
+        into LBRY itself, to see how it compares to the current trending
+        algorithm, but there are some challenges I need to overcome to get
+        that working.
       </p>
 
       <hr>
