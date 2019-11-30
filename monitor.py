@@ -20,6 +20,20 @@ def soften(delta):
     return -(mag**0.5)
 
 
+# Full path to the lbrynet binary
+lbrynet_bin = "/opt/LBRY/resources/static/daemon/lbrynet"
+
+def daemon_command(command, message="Calling lbrynet daemon..."):
+    """
+    Run a daemon command and return its output.
+    """
+    print(message, end="", flush=True)
+    command = lbrynet_bin + " " + command
+    parts = command.split(" ")
+    output = subprocess.run(parts, capture_output=True)
+    print("done.")
+    return json.loads(output.stdout)
+
 
 if __name__ == "__main__":
 
@@ -86,10 +100,21 @@ if __name__ == "__main__":
             the_dict["vanity_names"].append(data[claim_ids[i]]["name"])
             the_dict["final_scores"].append(trendings[i])
 
+        # Resolve the claims to get more info
+        arg = "resolve "
+        for i in range(len(claim_ids)):
+            arg += the_dict["vanity_names"][i]
+            arg += "#"
+            arg += the_dict["claim_ids"][i]
+            arg += " "
+        arg = arg[0:-1]
+
+        # Resolve the claims
+        result = daemon_command(arg)
+
         f = open("/home/brewer/Projects/LBRYnomics/trending.json", "w")
         f.write(json.dumps(the_dict))
         f.close()
-
 
         # Also save to HTML file
         f = open("/keybase/public/brendonbrewer/trending.html", "w")
@@ -103,9 +128,13 @@ if __name__ == "__main__":
         body {{ background-color: #333333;
                color: #DDDDDD; }}
         a    {{ color: #8888EE; }}
+        td.canonical {{ font-family: monospace; font-size: 0.8em; }}
       </style>
     </head>
     <body>
+      <h1>Experimental LBRY Trending List</h1>
+      <hr>
+
       <p>
         Welcome to my experimental responsive LBRY trending list.
         I take no responsibility for the linked content. Proceed with caution,
@@ -131,26 +160,41 @@ if __name__ == "__main__":
         into LBRY itself, to see how it compares to the current trending algorithm.
       </p>
 
-      <p>
+      <hr>
+      <p style="font-size: 1.2em;">
         Current epoch: {epoch}<br>
       </p>
 
       <table>
         <col width="130">
-        <tr style="font-weight: bold">  <td>Rank</td>   <td>Claim Name</td>  <td>Score</td> </tr>
+        <tr style="font-weight: bold; font-size: 1.2em"> <td>Rank</td>  <td style="width: 7em;">Score</td>   <td>Title (links open on lbry.tv)</td> <td>Canonical URL</td> </tr>
      
     """.format(epoch=epoch))
 
         for i in range(len(claim_ids)):
             f.write("<tr>")
             f.write("<td>{rank}</td>".format(rank=the_dict["ranks"][i]))
-            url = "https://lbry.tv/{vanity}:{claim_id}"\
-                    .format(vanity=the_dict["vanity_names"][i],
-                            claim_id=the_dict["claim_ids"][i])
-            link = "<a href=\"{url}\" target=\"_blank\">".format(url=url)\
-                         + the_dict["vanity_names"][i] + "</a>"
-            f.write("<td>" + str(link) + "</td>")
             f.write("<td>{score}</td>".format(score=the_dict["final_scores"][i]))
+
+            full_name = the_dict["vanity_names"][i] + "#" + the_dict["claim_ids"][i]
+            claim = result[full_name]
+            canonical_url = claim["canonical_url"]
+            tv_url = "https://lbry.tv/" + canonical_url[7:]
+            tv_url = tv_url.replace("#", ":")
+
+            if claim["value_type"] == "channel":
+                title = claim["name"]
+            else:
+                title = claim["value"]["title"]
+            short_title = title[0:50]
+            if len(short_title) < len(title):
+                short_title += "..."
+
+
+            link = "<a href=\"{url}\" target=\"_blank\">".format(url=tv_url)\
+                         + short_title + "</a>"
+            f.write("<td>" + link + "</td>")
+            f.write("<td class=\"canonical\">{url}</td>".format(url=canonical_url))
             f.write("</tr>\n")
         f.write("""
     </table>
@@ -161,9 +205,10 @@ if __name__ == "__main__":
         f.close()
 
 
-        print("Done epoch {epoch}.".format(epoch=epoch))
+        duration = time.time() - start_time
+        print("Done epoch {epoch}. It took {sec} seconds."\
+                        .format(epoch=epoch, sec=duration))
         epoch += 1
 
-        duration = time.time() - start_time
         time.sleep(300.0 - duration)
 
