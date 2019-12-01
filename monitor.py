@@ -148,12 +148,18 @@ if __name__ == "__main__":
         the_dict["thumbnail_urls"] = []
         the_dict["titles"] = []
         the_dict["canonical_urls"] = []
+        the_dict["tv_urls"] = []
         the_dict["channels"] = []
         for i in range(len(claim_ids)):
             full_name = the_dict["vanity_names"][i] + "#" + the_dict["claim_ids"][i]
             claim = result[full_name]
 
             the_dict["canonical_urls"].append(claim["canonical_url"])
+            tv_url = claim["canonical_url"]
+            tv_url.replace("#", ":")
+            tv_url.replace("lbry://", "https://lbry.tv/")
+            the_dict["tv_urls"].append(tv_url)
+
             if claim["canonical_url"].count("@") == 0:
                 the_dict["channels"].append(None)
             else:
@@ -172,10 +178,6 @@ if __name__ == "__main__":
                 the_dict["thumbnail_urls"].append(None)
 
 
-
-        f = open("/keybase/public/brendonbrewer/trending.json", "w")
-        f.write(json.dumps(the_dict))
-        f.close()
 
         # Also save to HTML file
         f = open("/keybase/public/brendonbrewer/trending.html", "w")
@@ -252,6 +254,18 @@ if __name__ == "__main__":
         f.close()
 
 
+
+        # Save truncated dict to JSON
+        f = open("/keybase/public/brendonbrewer/trending.json", "w")
+        the_dict.pop("vanity_names")
+        the_dict.pop("claim_ids")
+        the_dict.pop("canonical_urls")
+        the_dict.pop("final_scores")
+        for key in the_dict.keys():
+            if key != "epoch":
+                the_dict[key] = the_dict[key][0:100]
+        f.write(json.dumps(the_dict))
+        f.close()
 
 
         duration = time.time() - start_time
