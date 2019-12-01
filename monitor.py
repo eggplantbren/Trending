@@ -10,14 +10,13 @@ K = 0.9975961328836203
 def soften(delta):
     """
     Softening function applies to LBC changes.
-    Softens strongly on positive changes and weakly on negative ones.
     """
     if delta >= 0.0:
-        return delta**0.25
+        return delta**0.3
 
     # If delta is negative
     mag = np.abs(delta)
-    return -(mag**0.5)
+    return -(mag**0.3)
 
 
 # Full path to the lbrynet binary
@@ -143,6 +142,41 @@ if __name__ == "__main__":
         # Resolve the claims
         result = daemon_command(arg)
 
+
+        # Write to JSON file
+        # First add the extra data obtained from the resolve
+        the_dict["thumbnail_urls"] = []
+        the_dict["titles"] = []
+        the_dict["canonical_urls"] = []
+        the_dict["channels"] = []
+        for i in range(len(claim_ids)):
+            full_name = the_dict["vanity_names"][i] + "#" + the_dict["claim_ids"][i]
+            claim = result[full_name]
+
+            the_dict["canonical_urls"].append(claim["canonical_url"])
+            if claim["canonical_url"].count("@") == 0:
+                the_dict["channels"].append(None)
+            else:
+                temp = claim["canonical_url"]
+                the_dict["channels"].append(temp[7:].split("/")[0])
+
+            if claim["value_type"] == "channel":
+                the_dict["titles"].append(claim["name"])
+            else:
+                the_dict["titles"].append(claim["value"]["title"])
+
+            try:
+                the_dict["thumbnail_urls"]\
+                        .append(claim["value"]["thumbnail"]["url"])
+            except:
+                the_dict["thumbnail_urls"].append(None)
+
+
+
+        f = open("/keybase/public/brendonbrewer/trending.json", "w")
+        f.write(json.dumps(the_dict))
+        f.close()
+
         # Also save to HTML file
         f = open("/keybase/public/brendonbrewer/trending.html", "w")
         f.write("""
@@ -217,27 +251,6 @@ if __name__ == "__main__":
 
         f.close()
 
-        # Also write to JSON file
-        # First add the extra data obtained from the resolve
-        the_dict["thumbnail_urls"] = []
-        the_dict["titles"] = []
-        for i in range(len(claim_ids)):
-            full_name = the_dict["vanity_names"][i] + "#" + the_dict["claim_ids"][i]
-            claim = result[full_name]
-
-            if claim["value_type"] == "channel":
-                the_dict["titles"].append(claim["name"])
-            else:
-                the_dict["titles"].append(claim["value"]["title"])
-
-            try:
-                the_dict["thumbnail_urls"]\
-                        .append(claim["value"]["thumbnail"]["url"])
-            except:
-                the_dict["thumbnail_urls"].append(None)
-        f = open("/keybase/public/brendonbrewer/trending.json", "w")
-        f.write(json.dumps(the_dict))
-        f.close()
 
 
 
