@@ -143,10 +143,6 @@ if __name__ == "__main__":
         # Resolve the claims
         result = daemon_command(arg)
 
-        f = open("/home/brewer/Projects/LBRYnomics/trending.json", "w")
-        f.write(json.dumps(the_dict))
-        f.close()
-
         # Also save to HTML file
         f = open("/keybase/public/brendonbrewer/trending.html", "w")
         f.write("""
@@ -199,7 +195,7 @@ if __name__ == "__main__":
 
       <table>
         <col width="130">
-        <tr style="font-weight: bold; font-size: 1.2em"> <td>Rank</td>  <td style="width: 7em;">Score</td>   <td>Title (links open on lbry.tv)</td> <td>Canonical URL</td> </tr>
+        <tr style="font-weight: bold; font-size: 1.2em"> <td>Rank</td>  <td style="width: 12em;">Score</td>   <td>Title (links open on lbry.tv)</td> <td>Canonical URL</td> </tr>
      
     """.format(epoch=epoch))
 
@@ -220,6 +216,29 @@ if __name__ == "__main__":
     """)
 
         f.close()
+
+        # Also write to JSON file
+        # First add the extra data obtained from the resolve
+        the_dict["thumbnail_urls"] = []
+        the_dict["titles"] = []
+        for i in range(len(claim_ids)):
+            full_name = the_dict["vanity_names"][i] + "#" + the_dict["claim_ids"][i]
+            claim = result[full_name]
+
+            if claim["value_type"] == "channel":
+                the_dict["titles"].append(claim["name"])
+            else:
+                the_dict["titles"].append(claim["value"]["title"])
+
+            try:
+                the_dict["thumbnail_urls"]\
+                        .append(claim["value"]["thumbnail"]["url"])
+            except:
+                the_dict["thumbnail_urls"].append(None)
+        f = open("/keybase/public/brendonbrewer/trending.json", "w")
+        f.write(json.dumps(the_dict))
+        f.close()
+
 
 
         duration = time.time() - start_time
