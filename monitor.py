@@ -30,7 +30,6 @@ def daemon_command(command, message="Calling lbrynet daemon..."):
     command = lbrynet_bin + " " + command
     parts = command.split(" ")
     output = subprocess.run(parts, capture_output=True)
-    print(command)
     print("done.")
     return json.loads(output.stdout)
 
