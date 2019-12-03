@@ -154,8 +154,11 @@ if __name__ == "__main__":
             full_name = the_dict["vanity_names"][i] + "#" + the_dict["claim_ids"][i]
             claim = result[full_name]
 
+            try:
+                tv_url = claim["canonical_url"]
+            except:
+                tv_url = "NA"
             the_dict["canonical_urls"].append(claim["canonical_url"])
-            tv_url = claim["canonical_url"]
             tv_url.replace("#", ":")
             tv_url.replace("lbry://", "https://lbry.tv/")
             the_dict["tv_urls"].append(tv_url)
