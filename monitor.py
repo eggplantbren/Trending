@@ -155,10 +155,13 @@ if __name__ == "__main__":
             claim = result[full_name]
 
             try:
-                tv_url = claim["canonical_url"]
+                canonical_url = claim["canonical_url"]
+                tv_url = canonical_url
             except:
                 tv_url = "NA"
-            the_dict["canonical_urls"].append(claim["canonical_url"])
+                canonical_url = "NA"
+
+            the_dict["canonical_urls"].append(canonical_url)
             tv_url.replace("#", ":")
             tv_url.replace("lbry://", "https://lbry.tv/")
             the_dict["tv_urls"].append(tv_url)
