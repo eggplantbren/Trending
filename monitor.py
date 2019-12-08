@@ -5,7 +5,7 @@ import sqlite3
 import time
 
 # Decay parameter
-K = 0.9975961328836203
+K = 0.9951980443443538
 
 def soften(delta):
     """
