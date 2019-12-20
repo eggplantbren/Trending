@@ -1,3 +1,4 @@
+import html
 import json
 import numpy as np
 import subprocess
@@ -60,7 +61,7 @@ def format_line(i, the_dict, result):
 
 
     link = "<a href=\"{url}\" target=\"_blank\">".format(url=tv_url)\
-                 + short_title + "</a>"
+                 + html.escape(short_title) + "</a>"
     s += "<td>" + link + "</td>"
     s += "<td class=\"canonical\">{url}</td>".format(url=canonical_url)
     return s
