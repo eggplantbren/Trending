@@ -1,6 +1,7 @@
 import html
 import json
 import numpy as np
+import shlex
 import subprocess
 import sqlite3
 import time
@@ -126,6 +127,7 @@ SELECT claim_id, claim_name, (amount + support_amount) total_amount FROM claim
         arg += the_dict["claim_ids"][i]
         arg += " "
     arg = arg[0:-1]
+    arg = shlex.quote(arg) # Escape special shell characters
 
     # Resolve the claims
     result = daemon_command(arg)
@@ -275,13 +277,10 @@ if __name__ == "__main__":
         # Get the start time
         start_time = time.time()
 
-        try:
-            do_epoch(data, epoch)
-            duration = time.time() - start_time
-            print("Done epoch {epoch}. It took {sec} seconds."\
-                            .format(epoch=epoch, sec=duration))
-            epoch += 1
-            time.sleep(300.0 - duration)
-        except:
-            pass
+        do_epoch(data, epoch)
+        duration = time.time() - start_time
+        print("Done epoch {epoch}. It took {sec} seconds."\
+                        .format(epoch=epoch, sec=duration))
+        epoch += 1
+        time.sleep(300.0 - duration)
 
