@@ -60,7 +60,7 @@ def format_line(i, the_dict, result):
         short_title += "..."
 
 
-    link = "<a href=\"{url}\" target=\"_blank\">".format(url=tv_url)\
+    link = "<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">".format(url=html.escape(tv_url))\
                  + html.escape(short_title) + "</a>"
     s += "<td>" + link + "</td>"
     s += "<td class=\"canonical\">{url}</td>".format(url=canonical_url)
