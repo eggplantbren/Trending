@@ -128,6 +128,7 @@ SELECT claim_id, claim_name, (amount + support_amount) total_amount FROM claim
         arg += " "
     arg = arg[0:-1]
     arg = shlex.quote(arg) # Escape special shell characters
+    arg = arg[1:-1] # Remove ' ' put in by shlex.quote
 
     # Resolve the claims
     result = daemon_command(arg)
