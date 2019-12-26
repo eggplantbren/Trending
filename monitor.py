@@ -151,6 +151,7 @@ SELECT claim_id, claim_name, (amount + support_amount) total_amount FROM claim
         the_dict["canonical_urls"].append(canonical_url)
         tv_url.replace("#", ":")
         tv_url.replace("lbry://", "https://lbry.tv/")
+        tv_url = html.escape(tv_url)
         the_dict["tv_urls"].append(tv_url)
 
         if claim["canonical_url"].count("@") == 0:
@@ -211,10 +212,9 @@ SELECT claim_id, claim_name, (amount + support_amount) total_amount FROM claim
   </p>
 
   <p>
-    I am also working to try to incorporate a similar algorithm
-    into LBRY itself, to see how it compares to the current trending
-    algorithm, but there are some challenges I need to overcome to get
-    that working.
+    If you want to connect your LBRY app to
+    a wallet server that implements a very similar
+    algorithm, see <a href="https://open.lbry.com/@BrendonBrewer:3/wallet-server:1" target="_blank" rel="noopener noreferrer">here</a>.
   </p>
 
   <hr>
